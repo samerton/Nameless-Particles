@@ -2,7 +2,7 @@
 /*
  *	Made by Samerton
  *  https://github.com/samerton
- *  NamelessMC version 2.0.0-pr5
+ *  NamelessMC version 2.0.0-pr6
  *
  *  License: MIT
  *
@@ -13,8 +13,8 @@ class Particles_Module extends Module {
 	public function __construct(){
 		$name = 'Particles';
 		$author = '<a href="https://samerton.me" target="_blank" rel="nofollow noopener">Samerton</a>, <a href="https://vincentgarreau.com/particles.js/" target="_blank" rel="noopener nofollow">particles.js</a>';
-		$module_version = '2.0.0-pr5';
-		$nameless_version = '2.0.0-pr5';
+		$module_version = '1.0.0';
+		$nameless_version = '2.0.0-pr6';
 
 		parent::__construct($this, $name, $author, $module_version, $nameless_version);
 
@@ -29,18 +29,7 @@ class Particles_Module extends Module {
 	}
 
 	public function onEnable(){
-		// Add to template
-		if(file_exists(ROOT_PATH . '/custom/templates/' . TEMPLATE . '/header.tpl')){
-			$template = file_get_contents(ROOT_PATH . '/custom/templates/' . TEMPLATE . '/header.tpl');
-
-			if(strpos($template, '<body>') !== false && strpos($template, 'particles-js') === false){
-				try {
-					file_put_contents(ROOT_PATH . '/custom/templates/' . TEMPLATE . '/header.tpl', $template . PHP_EOL . '<div id="particles-js"></div>');
-				} catch(Exception $e){
-					// Unable to add to template
-				}
-			}
-		}
+		// Not necessary
 	}
 
 	public function onDisable(){
@@ -64,7 +53,7 @@ class Particles_Module extends Module {
 			    height: 100%;
 			    z-index: 0;
 			}
-			.home-header {
+			.home-header, .masthead {
 				z-index: -1;
 			}
 			.home-header .container {
@@ -72,6 +61,32 @@ class Particles_Module extends Module {
 				position: relative;
 			}
 			');
+
+			// Add to template - Default template
+			if(file_exists(ROOT_PATH . '/custom/templates/Default/header.tpl')){
+				$template = file_get_contents(ROOT_PATH . '/custom/templates/Default/header.tpl');
+
+				if(strpos($template, '<body>') !== false && strpos($template, 'particles-js') === false){
+					try {
+						file_put_contents(ROOT_PATH . '/custom/templates/Default/header.tpl', $template . PHP_EOL . '<div id="particles-js"></div>');
+					} catch(Exception $e){
+						// Unable to add to template
+					}
+				}
+			}
+
+			// Default revamp
+			if(file_exists(ROOT_PATH . '/custom/templates/DefaultRevamp/navbar.tpl')){
+				$template = file_get_contents(ROOT_PATH . '/custom/templates/DefaultRevamp/navbar.tpl');
+
+				if(strpos($template, '<div class="ui masthead') !== false && strpos($template, 'particles-js') === false){
+					try {
+						file_put_contents(ROOT_PATH . '/custom/templates/DefaultRevamp/navbar.tpl', str_replace('<div class="ui masthead', '<div id="particles-js"></div><div class="ui masthead', $template));
+					} catch(Exception $e){
+						// Unable to add to template
+					}
+				}
+			}
 		}
 	}
 }
